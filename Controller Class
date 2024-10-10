@@ -1,0 +1,36 @@
+{*ControllerClass}:
+
+package com.logistics.controller;
+import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+
+@RestController
+@RequestMapping("/load") 
+public class LoadController {
+@Autowired
+private LoadService loadService;
+@PostMapping
+public String addLoad(@RequestBody Load load) { 
+loadService.addLoad(load); 
+return "Load details added successfully";
+}
+@GetMapping 
+public List<Load> getLoadsByShipperId(@RequestParam String shipperId) { 
+return loadService.getLoadsByShipperId(shipperId);
+} 
+@GetMapping("/{loadId}")
+public Optional<Load> getLoadById(@PathVariable Long loadId) {
+return loadService.getLoadById(loadId); 
+}
+@PutMapping("/{loadId}") 
+public Load updateLoad(@PathVariable Long loadId, @RequestBody Load updatedLoad) { 
+return loadService.updateLoad(loadId, updatedLoad); 
+}
+@DeleteMapping("/{loadId}") 
+public String deleteLoad(@PathVariable Long loadId) { 
+loadService.deleteLoad(loadId); 
+return "Load deleted successfully";
+}
+}
