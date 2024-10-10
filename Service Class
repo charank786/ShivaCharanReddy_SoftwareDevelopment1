@@ -1,0 +1,50 @@
+
+package com.logistics.service;
+
+import com.logistics.entity.Load;
+import com.logistics.repository.LoadRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public class LoadService {
+
+    @Autowired
+    private LoadRepository loadRepository;
+
+    public Load addLoad(Load load) {
+        return loadRepository.save(load);
+    }
+
+    public List<Load> getLoadsByShipperId(String shipperId) {
+        return loadRepository.findByShipperId(shipperId);
+    }
+
+    public Optional<Load> getLoadById(Long loadId) {
+        return loadRepository.findById(loadId);
+    }
+
+    public Load updateLoad(Long loadId, Load updatedLoad) {
+        Optional<Load> existingLoad = loadRepository.findById(loadId);
+        if (existingLoad.isPresent()) {
+            Load load = existingLoad.get();
+            load.setLoadingPoint(updatedLoad.getLoadingPoint());
+            load.setUnloadingPoint(updatedLoad.getUnloadingPoint());
+            load.setProductType(updatedLoad.getProductType());
+            load.setTruckType(updatedLoad.getTruckType());
+            load.setNoOfTrucks(updatedLoad.getNoOfTrucks());
+            load.setWeight(updatedLoad.getWeight());
+            load.setComment(updatedLoad.getComment());
+            load.setDate(updatedLoad.getDate());
+            return loadRepository.save(load);
+        } else {
+            throw new RuntimeException("Load with ID " + loadId + " not found.");
+        }
+    }
+
+    public void deleteLoad(Long loadId) {
+        loadRepository.deleteById(loadId);
+    }
+}
